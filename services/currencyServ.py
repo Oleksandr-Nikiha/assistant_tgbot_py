@@ -1,30 +1,9 @@
+import logging
 import requests
-from datetime import datetime, timedelta
 
-from models.currency import ListCurrency, Currency
 from app.config import NBU_URL
-
-
-def memorize(func):
-    cache = {}
-    stamp = {}
-
-    def wrapper(*args):
-        if args in cache:
-            if datetime.now() - stamp[args] > timedelta(hours=1):
-                result = func(*args)
-                cache[args] = result
-                stamp[args] = datetime.now()
-                return result
-            else:
-                return cache[args]
-        else:
-            stamp[args] = datetime.now()
-            result = func(*args)
-            cache[args] = result
-            return result
-
-    return wrapper
+from utils.memo import memorize_stamp
+from models.currency import ListCurrency, Currency
 
 
 def fetch_currency_data():
@@ -33,11 +12,11 @@ def fetch_currency_data():
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        print(f"Error fetching currency data: {e}")
+        logging.error(f"Error fetching currency data: {e}")
         return None
 
 
-@memorize
+@memorize_stamp
 def get_currency_rate():
     currency_data = fetch_currency_data()
 
@@ -47,6 +26,10 @@ def get_currency_rate():
         return list_currency_instance
 
     return None
+
+
+def main():
+    get_currency_rate()
 
 
 if __name__ == '__main__':

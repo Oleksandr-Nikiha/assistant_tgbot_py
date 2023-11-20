@@ -1,39 +1,12 @@
 import json
-
-import requests
 import logging
-from datetime import datetime, timedelta
+import requests
 
+from constans import listComm
+from utils.memo import memorize, memorize_stamp
 from models.weather import Weather, ListWeather
 from models.forecast import Forecast, Language, ListForecast
-# from app.config import WEATHER_URL, CONDITION_URL, WEATHER_TOKEN
-from constans import listComm
-
-WEATHER_URL="https://api.weatherapi.com/v1/current.json?q="
-WEATHER_TOKEN="2883999254fe47928d861353232909"
-CONDITION_URL="https://www.weatherapi.com/docs/conditions.json"
-
-
-def memorize(func):
-    cache = {}
-    stamp = {}
-
-    def wrapper(*args):
-        if args in cache:
-            if datetime.now() - stamp[args] > timedelta(hours=1):
-                result = func(*args)
-                cache[args] = result
-                stamp[args] = datetime.now()
-                return result
-            else:
-                return cache[args]
-        else:
-            stamp[args] = datetime.now()
-            result = func(*args)
-            cache[args] = result
-            return result
-
-    return wrapper
+from app.config import WEATHER_URL, CONDITION_URL, WEATHER_TOKEN
 
 
 def fetch_weather_condition():
@@ -53,8 +26,16 @@ def parsing_forecast_data():
     forecast_data = fetch_weather_condition()
 
     if forecast_data:
-        list_of_forecasting = [Forecast(**forecast_dict) for forecast_dict in forecast_data]
-        list_forecast_instance: ListForecast[Forecast] = ListForecast(forecasting=list_of_forecasting)
+        list_of_forecasting = [Forecast(**{
+            'code': d['code'],
+            'day': d['day'],
+            'night': d['night'],
+            'icon': d['icon'],
+            'languages': [
+                Language(**lang) for lang in d['languages']
+            ]
+        }) for d in forecast_data]
+        list_forecast_instance = ListForecast(forecasting=list_of_forecasting)
         return list_forecast_instance
 
     return None
@@ -62,7 +43,7 @@ def parsing_forecast_data():
 
 def fetch_weather_data():
     data = []
-    forecast_data: ListForecast[Forecast] = parsing_forecast_data()
+    forecast_data = parsing_forecast_data()
     try:
         for city in listComm.WEATHER_CITY.values():
             objects = {}
@@ -71,22 +52,22 @@ def fetch_weather_data():
             response.raise_for_status()
 
             r = response.json()
+
             is_day = r.get('current').get('is_day')
             weather_type = r.get('current').get('condition').get('code')
             forecast_info = forecast_data.get_forecast_by_code(weather_type).get_text_by_lang_code('uk', is_day)
+            city_data_name = next((name for name, action in listComm.WEATHER_CITY.items() if action == city), None)
 
             objects.update({
-                'city_data_name': r.get('location').get('name'),
+                'city_data_name': city_data_name,
                 'city_mapped_name': city,
                 'weather_type': forecast_info,
                 'last_update_date': r.get('current').get('last_updated'),
                 'temperature': r.get('current').get('temp_c'),
-                'relativeHumidity': r.get('current').get('humidity'),
+                'relative_humidity': r.get('current').get('humidity'),
                 'pressure': r.get('current').get('pressure_mb'),
-                'windSpeed': r.get('current').get('wind_kph'),
+                'wind_speed': r.get('current').get('wind_kph'),
             })
-
-            print(objects)
 
             data.append(objects)
         return data
@@ -95,18 +76,21 @@ def fetch_weather_data():
         return None
 
 
-@memorize
+@memorize_stamp
 def parsing_weather():
     weather_data = fetch_weather_data()
 
     if weather_data:
         list_of_weathering = [Weather(**weather_dict) for weather_dict in weather_data]
-        list_weather_instance: ListWeather[Weather] = ListWeather(weathering=list_of_weathering)
+        list_weather_instance = ListWeather(weathering=list_of_weathering)
         return list_weather_instance
 
     return None
 
 
-if __name__ == '__main__':
-    parsing_forecast_data()
+def main():
+    parsing_weather()
+
+
+if __name__ == "__main__":
     parsing_weather()

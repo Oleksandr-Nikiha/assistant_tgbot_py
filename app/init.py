@@ -9,6 +9,8 @@ from handlers.user.currency import currency_router
 from handlers.user.weather import weather_router
 from handlers.error.catcher import error_router
 
+from services import currencyServ, weatherServ
+
 
 async def main() -> None:
     dp.include_routers(
@@ -23,5 +25,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    currencyServ.main()
+    weatherServ.main()
     asyncio.run(main())

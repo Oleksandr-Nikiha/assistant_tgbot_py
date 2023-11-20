@@ -19,10 +19,13 @@ async def weather_init(message: Message):
 
 @weather_router.callback_query(F.data.in_(listComm.WEATHER_CITY.values()))
 async def answer_weather(callback: CallbackQuery):
-    wether = parsing_weather().get_weather_by_name(callback.data)
-    await bot.edit_message_text(text=f"\uD83C\uDF07 В місті {wether.getCityMappedName()} - %s \uD83C\uDF07\n"
-                                     f"\uD83C\uDF21\uFE0F Температура: %sC°\n" +
-            "\uD83D\uDCA7 Вологість: %s%%\n" +
-            "\uD83E\uDE90 Атмосферний тиск: \n%s мм рт. ст.\n" +
-            "\uD83D\uDCA8 Швидкість вітру: \n%s км/г\n" +
-            "\uD83D\uDCC5 Останнє оновлення: \n%s")
+    weather = parsing_weather().get_weather_by_name(callback.data)
+    await bot.edit_message_text(text=f"\U0001f307 В місті {weather.city_data_name} - {weather.weather_type} \U0001f307\n"
+                                     f"\U0001f321\uFE0F Температура: {weather.temperature}C°\n"
+                                     f"\U0001f4a7 Вологість: {weather.relative_humidity}%%\n"
+                                     f"\U0001fa90 Атмосферний тиск: \n{weather.pressure} мм рт. ст.\n"
+                                     f"\U0001f4a8 Швидкість вітру: \n{weather.wind_speed} км/г\n"
+                                     f"\U0001f4c5 Останнє оновлення: \n{weather.last_update_date}",
+                                message_id=callback.message.message_id,
+                                chat_id=callback.message.chat.id,
+                                reply_markup=listKeyboard.weather_menu.as_markup())
