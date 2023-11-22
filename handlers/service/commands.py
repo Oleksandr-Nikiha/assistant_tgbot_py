@@ -1,4 +1,4 @@
-from app import bot
+from app import bot, db
 
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
@@ -12,6 +12,7 @@ commands_router = Router()
 
 @commands_router.message(Command('start'))
 async def start_command(message: Message) -> None:
+    await db.exists_user(message.from_user, message.chat)
     await message.answer(f"Вітаю, <b>{message.from_user.full_name}</b>!"
                          f"\nРадий познайомитися, я бот \"Домашній помічник\"."
                          f"\nБуду радий допомогти.",
@@ -23,6 +24,7 @@ async def start_command(message: Message) -> None:
 
 @commands_router.message(Command('menu'))
 async def menu_command(message: Message) -> None:
+    await db.exists_user(message.from_user, message.chat)
     await message.answer(f"Ви в головному меню.",
                          reply_markup=listKeyboard.general_menu.as_markup(
                              resize_keyboard=True,
