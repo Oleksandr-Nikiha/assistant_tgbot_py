@@ -63,4 +63,5 @@ class FireDB:
 
         await self.__update_document('users', document=str(user.id), objects=update_data)
 
-
+    async def delete_user(self, user: User):
+        await self.__del_document('users', document=str(user.id))
