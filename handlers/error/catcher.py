@@ -1,4 +1,7 @@
 import logging
+
+from app import bot
+
 from aiogram import Router
 from aiogram.types import Message, InlineQuery, ErrorEvent
 
@@ -17,10 +20,12 @@ async def echo_inline(inline_query: InlineQuery):
 
 @error_router.errors()
 async def handle_invalid_exceptions(event: ErrorEvent) -> None:
-    """
-    This handler receives error events with "Invalid" message in them.
-    """
-    # Because we specified `ExceptionTypeFilter` with `InvalidAge` exception type earlier,
-    # this handler will receive error events with any exception type except `InvalidAge` and
-    # only if the exception message contains "Invalid" substring.
-    logging.error("Error `Invalid` caught: %r while processing %r", event.exception, event.update)
+    if 'message is not modified' in str(event.exception):
+        logging.error("Error `Invalid` caught: %r while processing %r", event.exception, event.update)
+        await bot.answer_callback_query(event.update.callback_query.id,
+                                        "Перепрошую, але я не розумію що вам треба."
+                                        "\nЯкщо ця помилка виникла в неочікуваному місці, повідомте розробника."
+                                        "\nРозробник @LuckerDie",
+                                        True)
+    else:
+        logging.error("Error `Invalid` caught: %r while processing %r", event.exception, event.update)

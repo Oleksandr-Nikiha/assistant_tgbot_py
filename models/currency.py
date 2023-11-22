@@ -14,6 +14,7 @@ class Currency:
 class ListCurrency:
     currencies: list[Currency]
 
-    def get_rate_by_currency_code(self, currency_code: str) -> float:
+    def get_currency_by_code(self, currency_code: str) -> Currency:
         currency = next((c for c in self.currencies if c.cc == currency_code), None)
-        return currency.rate if currency else None
+        return currency
+    

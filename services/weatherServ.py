@@ -22,7 +22,7 @@ def fetch_weather_condition():
 
 
 @memorize
-def parsing_forecast_data():
+def parsing_forecast_data() -> ListForecast | None:
     forecast_data = fetch_weather_condition()
 
     if forecast_data:
@@ -41,7 +41,7 @@ def parsing_forecast_data():
     return None
 
 
-def fetch_weather_data():
+def fetch_weather_data() -> list[dict] | None:
     data = []
     forecast_data = parsing_forecast_data()
     try:
@@ -77,7 +77,7 @@ def fetch_weather_data():
 
 
 @memorize_stamp
-def parsing_weather():
+def parsing_weather() -> ListWeather | None:
     weather_data = fetch_weather_data()
 
     if weather_data:
@@ -88,7 +88,7 @@ def parsing_weather():
     return None
 
 
-def main():
+async def main():
     parsing_weather()
 
 

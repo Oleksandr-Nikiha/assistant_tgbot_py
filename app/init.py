@@ -11,6 +11,8 @@ from handlers.error.catcher import error_router
 
 from services import currencyServ, weatherServ
 
+from utils import addMessage
+
 
 async def main() -> None:
     dp.include_routers(
@@ -20,12 +22,16 @@ async def main() -> None:
         error_router
     )
 
+    await weatherServ.main()
+    await currencyServ.main()
+
+    # Startup message for admins
+    await addMessage.send_startup_message()
+
     # And the run events dispatching
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
-    currencyServ.main()
-    weatherServ.main()
     asyncio.run(main())

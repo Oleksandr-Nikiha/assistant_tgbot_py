@@ -19,3 +19,9 @@ for key, value in listComm.WEATHER_CITY.items():
     weather_menu.button(text=key, callback_data=value)
 weather_menu.button(text=listComm.INL_BACK_COMMAND, callback_data=listComm.INL_BACK_ACTION)
 weather_menu.adjust(3, 1, 1)
+
+other_menu = InlineKeyboardBuilder()
+for key, value in listComm.OTHER_MENU.items():
+    other_menu.button(text=key, callback_data=value)
+other_menu.button(text=listComm.INL_BACK_COMMAND, callback_data=listComm.INL_BACK_ACTION)
+other_menu.adjust(1, 1)

@@ -17,18 +17,18 @@ def fetch_currency_data():
 
 
 @memorize_stamp
-def get_currency_rate():
+def get_currency_rate() -> ListCurrency | None:
     currency_data = fetch_currency_data()
 
     if currency_data:
         list_of_currencies = [Currency(**currency_dict) for currency_dict in currency_data]
-        list_currency_instance: ListCurrency[Currency] = ListCurrency(currencies=list_of_currencies)
+        list_currency_instance: ListCurrency = ListCurrency(currencies=list_of_currencies)
         return list_currency_instance
 
     return None
 
 
-def main():
+async def main():
     get_currency_rate()
 
 
