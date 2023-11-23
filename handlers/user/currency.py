@@ -8,16 +8,20 @@ from keyboards import listKeyboard
 
 from services.currencyServ import get_currency_rate
 
+from aiogram.fsm.context import FSMContext
+from models.states import General
+
 currency_router = Router()
 
 
 @currency_router.message(F.text == listComm.CURRENCY_COMMAND)
-async def currency_init(message: Message):
+async def currency_init(message: Message, state: FSMContext):
+    await state.set_state(General.currency)
     await message.answer("Ви в розділі курсу валют \U0001f4b1 \nОберіть валюту яка вас цікавить.",
                          reply_markup=listKeyboard.currency_menu.as_markup())
 
 
-@currency_router.callback_query(F.data.in_(listComm.CURRENCY_DATA.values()))
+@currency_router.callback_query(General.currency)
 async def selected_currency(callback: CallbackQuery):
     currency = get_currency_rate().get_currency_by_code(callback.data)
     rate = round(currency.rate, 2)

@@ -45,7 +45,7 @@ def fetch_weather_data() -> list[dict] | None:
     data = []
     forecast_data = parsing_forecast_data()
     try:
-        for city in listComm.WEATHER_CITY.values():
+        for city in listComm.WEATHER_MENU.values():
             objects = {}
 
             response = requests.get(WEATHER_URL + city + "&key=" + WEATHER_TOKEN)
@@ -56,7 +56,7 @@ def fetch_weather_data() -> list[dict] | None:
             is_day = r.get('current').get('is_day')
             weather_type = r.get('current').get('condition').get('code')
             forecast_info = forecast_data.get_forecast_by_code(weather_type).get_text_by_lang_code('uk', is_day)
-            city_data_name = next((name for name, action in listComm.WEATHER_CITY.items() if action == city), None)
+            city_data_name = next((name for name, action in listComm.WEATHER_MENU.items() if action == city), None)
 
             objects.update({
                 'city_data_name': city_data_name,
