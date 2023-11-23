@@ -8,16 +8,20 @@ from keyboards import listKeyboard
 
 from services.weatherServ import parsing_weather
 
+from aiogram.fsm.context import FSMContext
+from models.states import General
+
 weather_router = Router()
 
 
 @weather_router.message(F.text == listComm.WEATHER_COMMAND)
-async def weather_init(message: Message):
+async def weather_init(message: Message, state: FSMContext):
+    await state.set_state(General.weather)
     await message.answer("Ви в розділі Погоди \U0001f30d \nОберіть місто яке вас цікавить.",
                          reply_markup=listKeyboard.weather_menu.as_markup())
 
 
-@weather_router.callback_query(F.data.in_(listComm.WEATHER_CITY.values()))
+@weather_router.callback_query(General.weather)
 async def answer_weather(callback: CallbackQuery):
     weather = parsing_weather().get_weather_by_name(callback.data)
     await bot.edit_message_text(text=f"\U0001f307 В місті {weather.city_data_name} - {weather.weather_type} \U0001f307\n"

@@ -7,6 +7,7 @@ from app import dp, bot
 from handlers.service.commands import commands_router
 from handlers.user.currency import currency_router
 from handlers.user.weather import weather_router
+from handlers.user.accounting import accounting_router
 from handlers.error.catcher import error_router
 
 from services import currencyServ, weatherServ
@@ -19,6 +20,7 @@ async def main() -> None:
         commands_router,
         currency_router,
         weather_router,
+        accounting_router,
         error_router
     )
 
