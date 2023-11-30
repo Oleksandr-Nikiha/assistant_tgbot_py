@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from utils.fireBase import FireDB
+from models.database.fireBase import FireDB
 
 from . import config
 
