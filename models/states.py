@@ -14,4 +14,5 @@ class Accounting(StatesGroup):
     annotation = State()
     validate = State()
     statistics = State()
+    type = State()
     period = State()
