@@ -1,11 +1,13 @@
+from bson import ObjectId
 from dataclasses import dataclass
-from google.api_core.datetime_helpers import DatetimeWithNanoseconds
+from datetime import datetime
 
 
 @dataclass
 class Accounting:
+    _id: ObjectId
     value: float
     type: str
-    created: DatetimeWithNanoseconds
+    created: datetime
     user: int
     annotation: str

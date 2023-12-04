@@ -1,45 +1,39 @@
-from .fireBase import FireDB
+from bson import ObjectId
 
-from aiogram.types import User, Chat
+from .mongoDB import MongoDB
 
-from datetime import datetime, timezone
+from aiogram.types import User
 
-from typing import AsyncGenerator, AsyncIterator
-
-from google.cloud.firestore_v1 import DocumentSnapshot
-from google.cloud.firestore_v1.base_query import FieldFilter
+from datetime import datetime
 
 
-class AccountingDB:
-    def __init__(self, fireDB: FireDB):
-        self.collection = 'accounting'
-        self.tz = timezone.utc
-        self.db = fireDB
+class AccountingDB(MongoDB):
+    def __init__(self, username: str, password: str, url: str):
+        super().__init__(username, password, url)
+        self.collection = self.db.account
 
     async def create_accounting(self, value: str, types: str, user: User, annotation: str):
         objects = {
-            'created': datetime.now(self.tz),
+            'created': datetime.now(),
             'type': types,
             'user': user.id,
             'value': float(value.replace(',', '.')),
             'annotation': annotation
         }
 
-        await self.db.add_document(self.collection, objects=objects)
+        await self.insert_document(self.collection, objects)
 
-    async def get_accounting_by_user(self, user: User) -> AsyncIterator[DocumentSnapshot] | None:
-        filters = [FieldFilter("user", "==", user.id)]
+    async def get_accounting_by_user(self, user: User):
+        search = {
+            "user": user.id
+        }
 
-        docs = await self.db.get_documents_by_filters(self.collection, filters)
-        return docs
+        documents = await self.find_document(self.collection, search, "created")
+        return await documents.to_list(length=100)
 
-    async def delete_accounting(self, user: User):
-        document = None
+    async def delete_accounting_by_id(self, ids: str):
+        search = {
+            "_id": ObjectId(ids)
+        }
 
-        filters = FieldFilter("user", "=", user.id)
-        docs = await self.db.get_latest_document_by_filter(self.collection, filters, 'created')
-
-        async for doc in docs:
-            document = doc
-
-        await self.db.delete_document(self.collection, document.id)
+        await self.delete_document(self.collection, search)

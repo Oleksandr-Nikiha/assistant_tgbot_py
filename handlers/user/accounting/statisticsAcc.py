@@ -1,20 +1,18 @@
-from app import bot, db
+from app import bot, config
 
 from aiogram import F, Router
 from aiogram.types import CallbackQuery
+from aiogram.fsm.context import FSMContext
 
 from constans import inlineComm
-from keyboards import inlineKeyboard
-
-from models.database.accountDB import AccountingDB
 from services import accountingServ
-
-from aiogram.fsm.context import FSMContext
+from keyboards import inlineKeyboard
 from models.states import Accounting
+from models.database.accountDB import AccountingDB
+
 
 statisticsAcc_router = Router()
-
-acc_db = AccountingDB(db)
+acc_db = AccountingDB(config.MONGO_USER, config.MONGO_PASSWORD, config.MONGO_URL)
 
 
 # Statistics accounting handlers

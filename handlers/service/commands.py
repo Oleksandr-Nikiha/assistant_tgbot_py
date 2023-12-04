@@ -1,19 +1,17 @@
-from app import bot, db
+from app import bot, config
 
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
-
-from keyboards import replyKeyboard
-from constans import inlineComm
-
 from aiogram.fsm.context import FSMContext
-from models.states import General
+from aiogram.types import Message, CallbackQuery
 
-from models.database.userDB import UserDB
+from constans import inlineComm
+from models.states import General
+from keyboards import replyKeyboard
+from models.database.userDB import UserMongoDB
 
 commands_router = Router()
-user_db = UserDB(db)
+user_db = UserMongoDB(username=config.MONGO_USER, password=config.MONGO_PASSWORD, url=config.MONGO_URL)
 
 
 @commands_router.message(Command('start'))

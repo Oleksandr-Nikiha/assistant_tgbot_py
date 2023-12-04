@@ -1,18 +1,22 @@
-from .fireBase import FireDB
+from .mongoDB import MongoDB
 
 from aiogram.types import User, Chat
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 
-class UserDB:
-    def __init__(self, fireDB: FireDB):
-        self.collection = 'users'
-        self.tz = timezone.utc
-        self.db: FireDB = fireDB
+class UserMongoDB(MongoDB):
+    def __init__(self, username: str, password: str, url: str):
+        super().__init__(username, password, url)
+        self.collection = self.db.users
 
     async def exists_user(self, user: User, chat: Chat = None):
-        user_in_db = await self.db.get_document(self.collection, str(user.id))
+        search = {
+            "user_id": user.id
+        }
+
+        user_in_db = await self.get_document(self.collection, search)
+
         if not user_in_db:
             await self.create_user(user, chat)
         else:
@@ -23,20 +27,28 @@ class UserDB:
             'chat_id': chat.id,
             'username': user.username,
             'first_name': user.first_name,
-            'created': datetime.now(self.tz),
-            'last_action': datetime.now(self.tz)
+            'created': datetime.now(),
+            'last_action': datetime.now()
         }
 
-        await self.db.add_document(self.collection, document=str(user.id), objects=create_data)
+        await self.insert_document(self.collection, create_data)
 
     async def update_user(self, user: User):
+        search = {
+            "user_id": user.id
+        }
+
         update_data = {
             'username': user.username,
             'first_name': user.first_name,
-            'last_action': datetime.now(self.tz)
+            'last_action': datetime.now()
         }
 
-        await self.db.update_document(self.collection, document=str(user.id), objects=update_data)
+        await self.update_document(self.collection, search, update_data)
 
     async def delete_user(self, user: User):
-        await self.db.delete_document(self.collection, document=str(user.id))
+        search = {
+            "user_id": user.id
+        }
+
+        await self.delete_document(self.collection, search)

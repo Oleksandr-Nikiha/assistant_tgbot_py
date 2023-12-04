@@ -1,14 +1,10 @@
-from typing import AsyncIterator
 from constans import parseDict
 from datetime import datetime, timedelta
 from models.accounting import Accounting
 
 
-from google.cloud.firestore_v1 import DocumentSnapshot
-
-
-async def parse_statistics(data: AsyncIterator[DocumentSnapshot], time_delta: str):
-    list_of_accounting = [Accounting(**accounting_dict.to_dict()) async for accounting_dict in data]
+async def parse_statistics(data, time_delta: str):
+    list_of_accounting = [Accounting(**accounting_dict) for accounting_dict in data]
 
     setup = False
     message = ''
