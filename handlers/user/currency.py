@@ -24,8 +24,7 @@ async def currency_init(message: Message, state: FSMContext):
 @currency_router.callback_query(General.currency)
 async def selected_currency(callback: CallbackQuery):
     currency = get_currency_rate().get_currency_by_code(callback.data)
-    rate = round(currency.rate, 2)
-    await bot.edit_message_text(text=f'На поточний день курс складає {rate} UAH до 1 {callback.data} '
+    await bot.edit_message_text(text=f'На поточний день курс складає {round(currency.rate, 2)} UAH до 1 {callback.data} '
                                      f'\nЗгідно офіційним даним з відкритого ресурсу НБУ.',
                                 message_id=callback.message.message_id,
                                 chat_id=callback.message.chat.id,
