@@ -23,8 +23,7 @@ async def start_command(message: Message, state: FSMContext) -> None:
                          f"\nРадий познайомитися, я бот \"Домашній помічник\"."
                          f"\nБуду радий допомогти.",
                          reply_markup=replyKeyboard.general_menu.as_markup(
-                             resize_keyboard=True,
-                             one_time_keyboard=True
+                             resize_keyboard=True
                          ))
 
 
@@ -35,8 +34,7 @@ async def menu_command(message: Message, state: FSMContext) -> None:
     await user_db.exists_user(message.from_user, message.chat)
     await message.answer(f"Ви в головному меню.",
                          reply_markup=replyKeyboard.general_menu.as_markup(
-                             resize_keyboard=True,
-                             one_time_keyboard=True
+                             resize_keyboard=True
                          ))
 
 
@@ -48,7 +46,6 @@ async def back_menu(callback: CallbackQuery, state: FSMContext) -> None:
     await bot.send_message(callback.message.chat.id,
                            f"Ви в головному меню.",
                            reply_markup=replyKeyboard.general_menu.as_markup(
-                               resize_keyboard=True,
-                               one_time_keyboard=True
+                               resize_keyboard=True
                            ))
 

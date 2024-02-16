@@ -22,13 +22,22 @@ class UserMongoDB(MongoDB):
         else:
             await self.update_user(user)
 
+    async def admins_users(self):
+        search = {
+            "admin": True
+        }
+
+        users_in_db = await self.find_document(self.collection, search)
+        return await users_in_db.to_list(length=100)
+
     async def create_user(self, user: User, chat: Chat = None):
         create_data = {
             'chat_id': chat.id,
             'username': user.username,
             'first_name': user.first_name,
             'created': datetime.now(),
-            'last_action': datetime.now()
+            'last_action': datetime.now(),
+            'admin': False
         }
 
         await self.insert_document(self.collection, create_data)
