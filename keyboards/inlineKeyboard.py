@@ -7,7 +7,21 @@ currency_menu = InlineKeyboardBuilder()
 for key, value in inlineComm.CURRENCY_MENU.items():
     currency_menu.button(text=key, callback_data=value)
 currency_menu.button(text=inlineComm.INL_BACK_COMMAND, callback_data=inlineComm.INL_BACK_ACTION)
-currency_menu.adjust(3, 3, 1)
+currency_menu.adjust(1, 1, 1)
+
+currency_type = InlineKeyboardBuilder()
+for key, value in inlineComm.CURRENCY_TYPE.items():
+    currency_type.button(text=key, callback_data=value)
+for key, value in inlineComm.BEHIND_MENU.items():
+    currency_type.button(text=key, callback_data=value)
+currency_type.adjust(3, 3, 1)
+
+currency_action = InlineKeyboardBuilder()
+for key, value in inlineComm.SWAP_MENU.items():
+    currency_action.button(text=key, callback_data=value)
+for key, value in inlineComm.BEHIND_MENU.items():
+    currency_action.button(text=key, callback_data=value)
+currency_action.adjust(1, 1, 1)
 
 weather_menu = InlineKeyboardBuilder()
 for key, value in inlineComm.WEATHER_MENU.items():

@@ -1,10 +1,9 @@
 # Global command && action
-INL_BACK_COMMAND: str = 'Назад \U0001f519'
+INL_BACK_COMMAND: str = 'До головного меню \U0001f519'
 INL_BACK_ACTION: str = 'back'
 
 CANCELED_ACTION = 'Cancel'
 BEHIND_ACTION = 'Behind'
-
 
 CANCELED_MENU = {
     'Скасувати \u2B55': CANCELED_ACTION
@@ -14,7 +13,24 @@ BEHIND_MENU = {
     'Повернутися \u21A9\uFE0F': BEHIND_ACTION
 }
 
-# Currency menu buttons
+
+#                  Currency menu buttons                 #
+CURRENT_CURR = 'current_currency'
+CURRENT_SWAP = 'current_swap'
+
+CURRENCY_MENU = {
+    'Поточний курс \u2139\uFE0F': CURRENT_CURR,
+    'Обмін валюти \U0001f504': CURRENT_SWAP
+}
+
+BUY_ACTION = 'buy_curr'
+SELL_ACTION = 'sell_curr'
+
+SWAP_MENU = {
+    "Купити Валюту \U0001f53c": BUY_ACTION,
+    "Продати Валюту \U0001f53d": SELL_ACTION
+}
+
 USD_ACTION = 'USD'
 EUR_ACTION = 'EUR'
 PLN_ACTION = 'PLN'
@@ -22,7 +38,7 @@ GBP_ACTION = 'GBP'
 CHF_ACTION = 'CHF'
 JPY_ACTION = 'JPY'
 
-CURRENCY_MENU = {
+CURRENCY_TYPE = {
     'USD \U0001f1fa\U0001f1f8': USD_ACTION,
     'EUR \U0001f1ea\U0001f1fa': EUR_ACTION,
     'PLN \U0001f1f5\U0001f1f1': PLN_ACTION,
@@ -31,7 +47,8 @@ CURRENCY_MENU = {
     'JPY \U0001f1ef\U0001f1f5': JPY_ACTION
 }
 
-# Weather menu buttons
+
+#                    Weather menu buttons             #
 KYIV_ACTION = 'Kyiv'
 VYSH_ACTION = 'Vyshhorod'
 TETV_ACTION = 'Tetiyiv'
@@ -44,7 +61,8 @@ WEATHER_MENU = {
     "Біла церква": BT_ACTION
 }
 
-# Accounting menu buttons
+
+#                       Accounting menu buttons                  #
 INCOME_ACTION = 'Income'
 COST_ACTION = 'Cost'
 STATS_ACTION = 'Stats'

@@ -8,6 +8,18 @@ class General(StatesGroup):
     accounting = State()
 
 
+class Currency(StatesGroup):
+    menu = State()
+
+    curr_types = State()
+    curr_result = State()
+
+    swap_types = State()
+    swap_action = State()
+    swap_values = State()
+    swap_result = State()
+
+
 class Accounting(StatesGroup):
     action = State()
     value = State()
