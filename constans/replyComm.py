@@ -1,5 +1,5 @@
 # General Menu
 WEATHER_COMMAND: str = 'Погода \U0001f30d'
-CURRENCY_COMMAND: str = 'Курс валют \U0001f4b1'
+CURRENCY_COMMAND: str = 'Валюти \U0001f4b1'
 ACCOUNTING_COMMAND: str = 'Фінансовий облік \U0001f4d2'
 DEFAULT_MENU: list[str] = [CURRENCY_COMMAND, WEATHER_COMMAND, ACCOUNTING_COMMAND]
