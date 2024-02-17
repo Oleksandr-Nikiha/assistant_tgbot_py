@@ -5,6 +5,7 @@ load_dotenv()
 
 BOT_TOKEN: str = os.getenv('BOT_TOKEN')
 NBU_URL: str = os.getenv('NBU_URL')
+PB_URL: str = os.getenv('PB_CURRENCY')
 
 WEATHER_URL: str = os.getenv('WEATHER_URL')
 CONDITION_URL: str = os.getenv('CONDITION_URL')
