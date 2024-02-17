@@ -29,8 +29,13 @@ async def current_currency(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Currency.curr_result)
 
     currency = get_currency_rate().get_currency_by_code(callback.data)
-    await bot.edit_message_text(text=f'На поточний день курс складає {round(currency.rate, 2)} UAH до 1 {callback.data} '
-                                     f'\nЗгідно офіційним даним з відкритого ресурсу НБУ.',
+    text = (f'На поточний день вартість 1 {currency.currency} складає'
+            f'\n{round(currency.saleRateNB, 2)} UAH - за курсом НБУ'
+            f'\n{round(currency.saleRate, 2)} UAH - курс купівлі.'
+            f'\n{round(currency.purchaseRate, 2)} UAH - курс продажу'
+            f'\nЗгідно офіційним даним з відкритого ресурсу PrivatBank.')
+
+    await bot.edit_message_text(text=text,
                                 message_id=callback.message.message_id,
                                 chat_id=callback.message.chat.id,
                                 reply_markup=inlineKeyboard.currency_type.as_markup())
