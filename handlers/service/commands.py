@@ -1,4 +1,4 @@
-from app import bot, config
+from app import bot
 
 from aiogram import Router, F
 from aiogram.filters import Command
@@ -8,10 +8,9 @@ from aiogram.types import Message, CallbackQuery
 from constans import inlineComm
 from models.states import General
 from keyboards import replyKeyboard
-from models.database.userDB import UserMongoDB
+from models.database import user_db
 
 commands_router = Router()
-user_db = UserMongoDB(username=config.MONGO_USER, password=config.MONGO_PASSWORD, url=config.MONGO_URL)
 
 
 @commands_router.message(Command('start'))

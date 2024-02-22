@@ -5,27 +5,41 @@ from app.config import PB_URL
 from utils.memo import memorize_stamp
 from models.currency import ListCurrency, Currency
 
-from datetime import date
+from datetime import date, timedelta
 
 
-def fetch_currency_data():
+def fetch_currency_data() -> dict:
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
     try:
-        response = requests.get(PB_URL + date.today().strftime('%d.%m.%Y'))
-        response.raise_for_status()
-        return response.json()
+        today_request = requests.get(PB_URL + today.strftime('%d.%m.%Y'))
+        yesterday_request = requests.get(PB_URL + yesterday.strftime('%d.%m.%Y'))
+
+        today_request.raise_for_status() and yesterday_request.raise_for_status()
+
+        today_response = today_request.json()
+        yesterday_response = yesterday_request.json()
+
+        if today_response.get('exchangeRate'):
+            return {'value': today_response.get('exchangeRate')}
+        else:
+            return {'date': yesterday, 'value': yesterday_response.get('exchangeRate')}
+
     except requests.RequestException as e:
         logging.error(f"Error fetching currency data: {e}")
-        return None
+        exit()
 
 
 @memorize_stamp
 def get_currency_rate() -> ListCurrency | None:
-    currency_net_data = fetch_currency_data()
-    currency_data = currency_net_data.get('exchangeRate')
+    currency_dict: dict = fetch_currency_data()
+    currency_date: date = currency_dict.get('date')
+    currency_data: list = currency_dict.get('value')
 
     if currency_data:
         list_of_currencies = [Currency(**currency_dict) for currency_dict in currency_data]
-        list_currency_instance: ListCurrency = ListCurrency(currencies=list_of_currencies)
+        list_currency_instance: ListCurrency = ListCurrency(currencies=list_of_currencies, by_date=currency_date)
         return list_currency_instance
 
     return None

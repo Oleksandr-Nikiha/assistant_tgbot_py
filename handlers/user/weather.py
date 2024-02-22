@@ -1,4 +1,4 @@
-from app import bot
+from app import bot, config
 
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
@@ -10,12 +10,17 @@ from services.weatherServ import parsing_weather
 
 from aiogram.fsm.context import FSMContext
 from models.states import General
+from models.database.userDB import UserMongoDB
+
 
 weather_router = Router()
+user_db = UserMongoDB(username=config.MONGO_USER, password=config.MONGO_PASSWORD, url=config.MONGO_URL)
 
 
 @weather_router.message(F.text == replyComm.WEATHER_COMMAND)
 async def weather_init(message: Message, state: FSMContext):
+    await user_db.exists_user(message.from_user, message.chat)
+
     await state.set_state(General.weather)
     await message.answer("Ви в розділі Погоди \U0001f30d \nОберіть місто яке вас цікавить.",
                          reply_markup=inlineKeyboard.weather_menu.as_markup())

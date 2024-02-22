@@ -1,4 +1,4 @@
-from app import bot
+from app import bot, config
 
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
@@ -8,6 +8,7 @@ from keyboards import inlineKeyboard
 
 from aiogram.fsm.context import FSMContext
 from models.states import Accounting
+from models.database import user_db
 
 accounting_router = Router()
 
@@ -15,6 +16,8 @@ accounting_router = Router()
 # Global handlers for accounting
 @accounting_router.message(F.text == replyComm.ACCOUNTING_COMMAND)
 async def accounting_init(message: Message, state: FSMContext):
+    await user_db.exists_user(message.from_user, message.chat)
+
     await state.clear()
     await state.set_state(Accounting.action)
 

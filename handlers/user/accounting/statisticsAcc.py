@@ -1,4 +1,4 @@
-from app import bot, config
+from app import bot
 
 from aiogram import F, Router
 from aiogram.types import CallbackQuery
@@ -8,11 +8,10 @@ from constans import inlineComm
 from services import accountingServ
 from keyboards import inlineKeyboard
 from models.states import Accounting
-from models.database.accountDB import AccountingDB
+from models.database import acc_db
 
 
 statisticsAcc_router = Router()
-acc_db = AccountingDB(config.MONGO_USER, config.MONGO_PASSWORD, config.MONGO_URL)
 
 
 # Statistics accounting handlers

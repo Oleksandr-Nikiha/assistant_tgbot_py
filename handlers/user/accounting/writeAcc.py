@@ -9,10 +9,9 @@ from aiogram.types import Message, CallbackQuery
 from constans import inlineComm
 from keyboards import inlineKeyboard
 from models.states import Accounting
-from models.database.accountDB import AccountingDB
+from models.database import acc_db
 
 writeAcc_router = Router()
-acc_db = AccountingDB(config.MONGO_USER, config.MONGO_PASSWORD, config.MONGO_URL)
 
 
 # Set accounting handlers

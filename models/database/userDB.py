@@ -32,6 +32,7 @@ class UserMongoDB(MongoDB):
 
     async def create_user(self, user: User, chat: Chat = None):
         create_data = {
+            'user_id': user.id,
             'chat_id': chat.id,
             'username': user.username,
             'first_name': user.first_name,
