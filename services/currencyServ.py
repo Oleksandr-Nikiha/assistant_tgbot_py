@@ -14,16 +14,15 @@ def fetch_currency_data() -> dict:
 
     try:
         today_request = requests.get(PB_URL + today.strftime('%d.%m.%Y'))
-        yesterday_request = requests.get(PB_URL + yesterday.strftime('%d.%m.%Y'))
-
-        today_request.raise_for_status() and yesterday_request.raise_for_status()
-
+        today_request.raise_for_status()
         today_response = today_request.json()
-        yesterday_response = yesterday_request.json()
-
         if today_response.get('exchangeRate'):
             return {'value': today_response.get('exchangeRate')}
         else:
+            yesterday_request = requests.get(PB_URL + yesterday.strftime('%d.%m.%Y'))
+            yesterday_request.raise_for_status()
+            yesterday_response = yesterday_request.json()
+
             return {'date': yesterday, 'value': yesterday_response.get('exchangeRate')}
 
     except requests.RequestException as e:

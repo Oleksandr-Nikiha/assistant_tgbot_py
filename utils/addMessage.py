@@ -1,13 +1,9 @@
 from app import bot
 
-from app import config
-
 from keyboards import replyKeyboard
 
 from models.database import user_db
 from services import userServ
-
-#user_db = UserMongoDB(config.MONGO_USER, config.MONGO_PASSWORD, config.MONGO_URL)
 
 
 async def send_startup_message():
