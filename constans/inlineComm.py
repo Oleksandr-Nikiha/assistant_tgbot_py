@@ -53,12 +53,14 @@ KYIV_ACTION = 'Kyiv'
 VYSH_ACTION = 'Vyshhorod'
 TETV_ACTION = 'Tetiyiv'
 BT_ACTION = 'Bila%20Tserkva'
+BR_ACTION = 'Brovary'
 
 WEATHER_MENU = {
     "Київ": KYIV_ACTION,
     "Вишгород": VYSH_ACTION,
     "Тетіїв": TETV_ACTION,
-    "Біла церква": BT_ACTION
+    "Біла церква": BT_ACTION,
+    "Бровари": BR_ACTION
 }
 
 

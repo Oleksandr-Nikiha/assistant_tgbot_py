@@ -27,7 +27,7 @@ weather_menu = InlineKeyboardBuilder()
 for key, value in inlineComm.WEATHER_MENU.items():
     weather_menu.button(text=key, callback_data=value)
 weather_menu.button(text=inlineComm.INL_BACK_COMMAND, callback_data=inlineComm.INL_BACK_ACTION)
-weather_menu.adjust(3, 1, 1)
+weather_menu.adjust(3, 2, 1)
 
 accounting_menu = InlineKeyboardBuilder()
 for key, value in inlineComm.ACCOUNTING_MENU.items():
