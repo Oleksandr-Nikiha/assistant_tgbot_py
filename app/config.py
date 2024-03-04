@@ -1,3 +1,4 @@
+"""This config module where get and set configuration for bot use"""
 import os
 
 from dotenv import load_dotenv
