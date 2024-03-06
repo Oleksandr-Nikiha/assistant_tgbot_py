@@ -1,3 +1,5 @@
+"""This config module where get and set configuration for bot use"""
+
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
